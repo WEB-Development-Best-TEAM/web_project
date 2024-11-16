@@ -1,12 +1,12 @@
 import React from "react";
-import { db } from "./firebase"; // Importar os serviços que precisas
+import { db } from "./firebase";
 
 function App() {
   console.log("Firestore:", db);
 
   return (
     <div className="App">
-      <h1>Firebase Initialized</h1>
+      <h1>Game ON</h1>
     </div>
   );
 }
