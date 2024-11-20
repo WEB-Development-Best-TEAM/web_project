@@ -13,7 +13,7 @@ function LoginScreen() {
 
             {/* textBox for username */}
             <div class="inputBox">
-                <input type="text" placeholder="Nome de Usuário" required />
+                <input type="text" placeholder="Nome do Jogador" required />
                 <img class="icon" src={userIcon} />
             </div>
 
