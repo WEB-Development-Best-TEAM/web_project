@@ -1,13 +1,19 @@
 import React from "react";
 import { db } from "./firebase";
+import Register from "./pages/register"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
-  console.log("Firestore:", db);
+  console.log("Firebase: ", db);
+
+  console.log("Register", <Register/>);
 
   return (
-    <div className="App">
-      <h1>Game ON</h1>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/pages/register" element={<Register />} />
+      </Routes>
+    </Router>
   );
 }
 
