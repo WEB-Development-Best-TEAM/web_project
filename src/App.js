@@ -1,20 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { db } from "./firebase";
-import Register from "./pages/register"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import LoginScreen from "./EntryScreen_Components/LoginScreen";
+import PlayScreen from "./EntryScreen_Components/PlayScreen";
+import RegisterScreen from "./EntryScreen_Components/RegisterScreen";
 
 function App() {
   console.log("Firebase: ", db);
 
-  console.log("Register", <Register/>);
+  // console.log("Register", <Register/>);
 
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
-        <Route path="/pages/register" element={<Register />} />
+        <Route path="/" element={<PlayScreen />} />
+        <Route path="/LoginScreen" element={<LoginScreen />} />
+        <Route path="/RegisterScreen" element={<RegisterScreen />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
+
 
 export default App;
