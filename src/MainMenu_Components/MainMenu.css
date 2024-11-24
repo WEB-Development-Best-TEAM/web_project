@@ -1,0 +1,83 @@
+.tittle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw; 
+    margin: 0;
+    font-family: "Arial", sans-serif;
+    /*background-color: #1a1a1a;*/
+    color: #ffffff; 
+    position: relative;
+}
+
+
+.tittle h1 {
+    font-size: 36px;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0 0 20px 0;
+    text-align: center;
+    
+}
+
+
+.tittle hr {
+    width: 100%;
+    border: 0;
+    border-top: 2px solid #ffffff; 
+    margin-top: 10px;
+    position: absolute;
+    top: 50%; 
+}
+
+
+.button-container {
+    position: absolute;
+    top: 55%; 
+    right: 10%; 
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+
+.button-container button {
+    width: 200px;
+    height: 50px;
+    margin: 10px 0;
+    font-size: 16px;
+    font-weight: 400;
+    color: #ffffff;
+    background: transparent;
+    border: 2px solid #ffffff;
+    border-radius: 25px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+}
+
+.button-container button:hover {
+    background: #ffffff;
+    color: #000000;
+    transform: translateX(-10px); 
+}
+
+.background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1; /* Para o vídeo ficar atrás do conteúdo */
+}
+
+.background-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Garante que o vídeo cobre toda a tela sem distorções */
+}

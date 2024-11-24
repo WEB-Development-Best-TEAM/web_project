@@ -11,6 +11,9 @@ function PlayScreen() {
             <Link to="/LoginScreen">
                 <input type="button" value="Jogar"/>
             </Link>
+            <Link to ="/MainMenu">
+                <input type="button" value="Menu Principal"/>
+            </Link>
         </div>
     );
 }
