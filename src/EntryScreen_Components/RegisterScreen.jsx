@@ -1,41 +1,81 @@
-import React from 'react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from './firebaseConfig';
 import userIcon from './assets/user_icon.png';
 import passwordIcon from './assets/passWord_icon.png';
-import './EntryScreen.css';
-
-import { Link } from 'react-router-dom';
 
 function RegisterScreen() {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
+
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        if (password !== confirmPassword) {
+            setError('As senhas não coincidem');
+            setSuccess('');
+            return;
+        }
+        try {
+            await addDoc(collection(db, "users"), {
+                username,
+                password
+            });
+            setSuccess('Usuário registrado com sucesso!');
+            setError('');
+        } catch (error) {
+            setError('Erro ao registrar usuário');
+            setSuccess('');
+        }
+    };
+
     return (
-        <form>
-            <div class="background-blur"></div>
-            {/* header for login */}
-            <h1>Registre-se</h1>
+        <form onSubmit={handleRegister}>
+            <div className="background-blur"></div>
+            <h1>Registrar</h1>
 
-            {/* textBox for username */}
-            <div class="inputBox">
-                <input type="text" placeholder="Nome do Jogador" required />
-                <img class="icon" src={userIcon} />
+            <div className="inputBox">
+                <input
+                    type="text"
+                    placeholder="Nome de Usuário"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                />
+                <img className="icon" src={userIcon} alt="User Icon" />
             </div>
 
-            {/* textBox for password */}
-            <div class="inputBox">
-                <input type="password" placeholder="Palavra-Passe" required />
-                <img class="icon" src={passwordIcon} />
+            <div className="inputBox">
+                <input
+                    type="password"
+                    placeholder="Palavra-Passe"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+                <img className="icon" src={passwordIcon} alt="Password Icon" />
             </div>
 
-            {/* textBox for confirm password */}
-            <div class="inputBox">
-                <input type="password" placeholder="Confirmar Palavra-Passe" required />
-                <img class="icon" src={passwordIcon} />
+            <div className="inputBox">
+                <input
+                    type="password"
+                    placeholder="Confirmar Palavra-Passe"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                />
+                <img className="icon" src={passwordIcon} alt="Password Icon" />
             </div>
 
-            {/* link to forgot password */}
+            {error && <p>{error}</p>}
+            {success && <p>{success}</p>}
+
             <p>Já tenho uma conta, <Link to="/LoginScreen">entrar</Link>.</p>
 
-            {/* button to login */}
-            <input type="submit" value="Registrar Conta" />
-
+            <input type="submit" value="Registrar" />
         </form>
     );
 }
