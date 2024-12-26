@@ -14,20 +14,30 @@ function LoginScreen() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
+            // Query the database for the username
             const q = query(collection(db, "users"), where("username", "==", username));
             const querySnapshot = await getDocs(q);
+
+            // Check if the username exists
             if (querySnapshot.empty) {
-                setError('Nome de usuário não encontrado');
+                setError('Nome de utilizador não encontrado');
                 setSuccess('');
                 return;
             }
+
+            // Retrieve user data
             const userDoc = querySnapshot.docs[0];
             const userData = userDoc.data();
-            if (userData.password !== password) {
-                setError('Senha incorreta');
+
+            // Verify the password using bcrypt
+            const isPasswordValid = bcrypt.compareSync(password, userData.password);
+            if (!isPasswordValid) {
+                setError('Palavra-passe incorreta');
                 setSuccess('');
                 return;
             }
+
+            // Successful login
             setSuccess('Login realizado com sucesso!');
             setError('');
         } catch (error) {
@@ -44,7 +54,7 @@ function LoginScreen() {
             <div className="inputBox">
                 <input
                     type="text"
-                    placeholder="Nome de Usuário"
+                    placeholder="Nome de Utilizador"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required

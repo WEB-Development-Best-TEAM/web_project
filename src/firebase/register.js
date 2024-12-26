@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import registerUser from "../firebase/auth"; // Import the register function
+import registerUser from "./auth";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -10,12 +10,12 @@ const Register = () => {
   // Function to handle form submission
   const handleRegister = async (e) => {
     e.preventDefault();
-    setMessage(""); // Clear any previous messages
+    setMessage("");
     try {
       await registerUser(name, email, password);
-      setMessage("User successfully registered!"); // Success message
+      setMessage("User successfully registered!");
     } catch (error) {
-      setMessage("Error: " + error.message); // Display error message
+      setMessage("Error: " + error.message);
     }
   };
 

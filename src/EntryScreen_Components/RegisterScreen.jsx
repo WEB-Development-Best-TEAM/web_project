@@ -15,23 +15,26 @@ function RegisterScreen() {
 
     const handleRegister = async (e) => {
         e.preventDefault();
+
+        // Check if passwords match
         if (password !== confirmPassword) {
-            setError('As senhas não coincidem');
+            setError('As palavras-passe não coincidem');
             setSuccess('');
             return;
         }
 
+
         try {
-            // Verificar se o nome de usuário já existe
+            // Check if the username already exists
             const usernameQuery = query(collection(db, "users"), where("username", "==", username));
             const usernameSnapshot = await getDocs(usernameQuery);
             if (!usernameSnapshot.empty) {
-                setError('Nome de usuário já existe');
+                setError('Nome de utilizador já existe');
                 setSuccess('');
                 return;
             }
 
-            // Verificar se o email já existe
+            // Check if the email already exists
             const emailQuery = query(collection(db, "users"), where("email", "==", email));
             const emailSnapshot = await getDocs(emailQuery);
             if (!emailSnapshot.empty) {
@@ -40,17 +43,22 @@ function RegisterScreen() {
                 return;
             }
 
-            // Adicionar novo usuário
+            // Encrypt the password before saving
+            const salt = bcrypt.genSaltSync(10);
+            const hashedPassword = bcrypt.hashSync(password, salt);
+
+            // Add new user to the database
             await addDoc(collection(db, "users"), {
                 username,
                 email,
-                password,
+                password: hashedPassword,
                 registrationDate: new Date().toISOString()
             });
-            setSuccess('Usuário registrado com sucesso!');
+
+            setSuccess('Utilizador registado com sucesso!');
             setError('');
         } catch (error) {
-            setError('Erro ao registrar usuário');
+            setError('Erro ao registar utilizador');
             setSuccess('');
         }
     };
@@ -63,7 +71,7 @@ function RegisterScreen() {
             <div className="inputBox">
                 <input
                     type="text"
-                    placeholder="Nome de Usuário"
+                    placeholder="Nome de Utilizador"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
