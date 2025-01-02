@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from './firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { db, auth } from './firebaseConfig';
 import userIcon from './assets/user_icon.png';
 import passwordIcon from './assets/passWord_icon.png';
 
@@ -25,17 +26,15 @@ function LoginScreen() {
                 return;
             }
 
-            // Retrieve user data
+            // Retrieve the user's email from Firestore
             const userDoc = querySnapshot.docs[0];
             const userData = userDoc.data();
+            const email = userData.email;
 
-            // Verify the password using bcrypt
-            const isPasswordValid = bcrypt.compareSync(password, userData.password);
-            if (!isPasswordValid) {
-                setError('Palavra-passe incorreta');
-                setSuccess('');
-                return;
-            }
+            // Authenticate using Firebase Auth
+            await signInWithEmailAndPassword(auth, email, password);
+
+            console.log('User Information:', userData);
 
             // Successful login
             setSuccess('Login realizado com sucesso!');

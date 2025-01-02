@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
-import { db } from './firebaseConfig';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { db, auth } from './firebaseConfig';
 import userIcon from './assets/user_icon.png';
 import passwordIcon from './assets/passWord_icon.png';
 
@@ -16,13 +17,11 @@ function RegisterScreen() {
     const handleRegister = async (e) => {
         e.preventDefault();
 
-        // Check if passwords match
         if (password !== confirmPassword) {
             setError('As palavras-passe não coincidem');
             setSuccess('');
             return;
         }
-
 
         try {
             // Check if the username already exists
@@ -34,31 +33,26 @@ function RegisterScreen() {
                 return;
             }
 
-            // Check if the email already exists
-            const emailQuery = query(collection(db, "users"), where("email", "==", email));
-            const emailSnapshot = await getDocs(emailQuery);
-            if (!emailSnapshot.empty) {
-                setError('Email já existe');
-                setSuccess('');
-                return;
-            }
+            // Register user with Firebase Auth
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
 
-            // Encrypt the password before saving
-            const salt = bcrypt.genSaltSync(10);
-            const hashedPassword = bcrypt.hashSync(password, salt);
+            // Send verification email
+            await sendEmailVerification(user);
 
-            // Add new user to the database
+            // Save additional user details in Firestore
             await addDoc(collection(db, "users"), {
                 username,
                 email,
-                password: hashedPassword,
-                registrationDate: new Date().toISOString()
+                uid: user.uid,
+                registrationDate: new Date().toISOString(),
+                emailVerified: false
             });
 
-            setSuccess('Utilizador registado com sucesso!');
+            setSuccess('Registo bem-sucedido! Por favor, verifique o seu email.');
             setError('');
         } catch (error) {
-            setError('Erro ao registar utilizador');
+            setError('Erro ao registar utilizador: ' + error.message);
             setSuccess('');
         }
     };
