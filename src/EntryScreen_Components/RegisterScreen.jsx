@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, setDoc, doc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { db, auth } from './firebaseConfig';
 import userIcon from './assets/user_icon.png';
@@ -41,12 +41,11 @@ function RegisterScreen() {
             await sendEmailVerification(user);
 
             // Save additional user details in Firestore
-            await addDoc(collection(db, "users"), {
+            await setDoc(doc(db, "users", user.uid), {
                 username,
                 email,
                 uid: user.uid,
                 registrationDate: new Date().toISOString(),
-                emailVerified: false
             });
 
             setSuccess('Registo bem-sucedido! Por favor, verifique o seu email.');

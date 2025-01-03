@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { db } from "./firebase";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -11,18 +11,13 @@ import MainMenu from "./MainMenu_Components/MainMenu";
 function App() {
   console.log("Firebase: ", db);
 
-  // console.log("Register", <Register/>);
-
   return (
     <BrowserRouter>
-      <Routes>
+      <Routes> 
         <Route path="/" element={<PlayScreen />} />
         <Route path="/LoginScreen" element={<LoginScreen />} />
         <Route path="/RegisterScreen" element={<RegisterScreen />} />
-
         <Route path="/MainMenu" element={<MainMenu />} />
-
-        
       </Routes>
     </BrowserRouter>
   );

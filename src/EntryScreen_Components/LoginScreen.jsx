@@ -25,25 +25,35 @@ function LoginScreen() {
                 setSuccess('');
                 return;
             }
-
+            
             // Retrieve the user's email from Firestore
             const userDoc = querySnapshot.docs[0];
             const userData = userDoc.data();
             const email = userData.email;
-
+            
             // Authenticate using Firebase Auth
-            await signInWithEmailAndPassword(auth, email, password);
-
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            
+            // Check if the user has verified their email            
+            if (!user.emailVerified) {
+                console.log('User Information:', userData);
+                setError('Por favor, verifique o seu email antes de fazer login.');
+                setSuccess('');
+                return;
+            }
+            
+            // Log user information
             console.log('User Information:', userData);
-
+            
             // Successful login
             setSuccess('Login realizado com sucesso!');
             setError('');
-        } catch (error) {
-            setError('Erro ao fazer login');
-            setSuccess('');
-        }
-    };
+            } catch (error) {
+                setError('Erro ao fazer login: ' + error.message);
+                setSuccess('');
+            }
+        };
 
     return (
         <form onSubmit={handleLogin}>
