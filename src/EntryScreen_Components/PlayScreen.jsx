@@ -14,6 +14,12 @@ function PlayScreen() {
             <Link to ="/MainMenu">
                 <input type="button" value="Menu Principal"/>
             </Link>
+            <Link to ="/LeaderBoard">
+                <input type="button" value="LeaderBoard"/>
+            </Link>
+            <Link to ="/GameScreen">
+                <input type="button" value="GameScreen"/>
+            </Link>
         </div>
     );
 }

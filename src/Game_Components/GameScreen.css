@@ -1,0 +1,85 @@
+/* Estilos gerais */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 100vh;
+  background: url("assets/earth.png") no-repeat center center;
+  background-size: cover;
+  color: white;
+}
+
+/* Zona principal com pergunta e respostas */
+.main-content {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 20px;
+}
+
+/* Container para a pergunta */
+.question-container {
+  flex: 1;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+/* Container das respostas */
+.answers-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.answer-button {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s;
+}
+
+.answer-button:hover {
+  background-color: #555;
+}
+
+/* Sidebar */
+.sidebar {
+  flex: 1;
+  margin: 20px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.sidebar h2,
+.sidebar h3 {
+  margin: 0 0 20px 0;
+}
+
+.score-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.score-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #333;
+  border-radius: 5px;
+}

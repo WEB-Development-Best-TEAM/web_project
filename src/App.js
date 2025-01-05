@@ -9,6 +9,9 @@ import RegisterScreen from "./EntryScreen_Components/RegisterScreen";
 import MainMenu from "./MainMenu_Components/MainMenu";
 import Game from "./Game_Components/Game";
 import AnswerDetails from "./Game_Components/AnswerDetails";
+import LeaderBoardScreen from "./LeaderBoard/LeaderBoardScreen";
+import GameScreen from "./Game_Components/GameScreen";
+
 
 function App() {
   console.log("Firebase: ", db);
@@ -22,6 +25,8 @@ function App() {
         <Route path="/MainMenu" element={<MainMenu />} />
         <Route path="/Game" element={<Game />} />
         <Route path="/AnswerDetails" element={<AnswerDetails />} />
+        <Route path="/LeaderBoard" element={<LeaderBoardScreen />} />
+        <Route path="/GameScreen" element={<GameScreen />} />
       </Routes>
     </BrowserRouter>
   );
