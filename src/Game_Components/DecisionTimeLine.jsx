@@ -5,7 +5,8 @@ import "./DecisionTimeLine.css";
 
 const Decisions = () => {
   const [data, setData] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentDocIndex, setCurrentDocIndex] = useState(0);
+  const [currentHistoryIndex, setCurrentHistoryIndex] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,18 +22,29 @@ const Decisions = () => {
   }, []);
 
   const handleNext = () => {
-    if (currentIndex < data.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+    const currentDoc = data[currentDocIndex];
+    if (currentDoc) {
+      if (currentHistoryIndex < currentDoc.history.length - 1) {
+        setCurrentHistoryIndex(currentHistoryIndex + 1);
+      } else if (currentDocIndex < data.length - 1) {
+        setCurrentDocIndex(currentDocIndex + 1);
+        setCurrentHistoryIndex(0);
+      }
     }
   };
 
   const handlePrevious = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+    if (currentHistoryIndex > 0) {
+      setCurrentHistoryIndex(currentHistoryIndex - 1);
+    } else if (currentDocIndex > 0) {
+      setCurrentDocIndex(currentDocIndex - 1);
+      const previousDoc = data[currentDocIndex - 1];
+      setCurrentHistoryIndex(previousDoc.history.length - 1);
     }
   };
 
-  const currentDecision = data[currentIndex]?.history[0]; // Ajuste conforme sua estrutura
+  const currentDecision =
+    data[currentDocIndex]?.history[currentHistoryIndex];
 
   return (
     <div>
