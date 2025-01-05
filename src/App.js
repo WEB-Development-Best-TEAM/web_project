@@ -7,6 +7,7 @@ import LoginScreen from "./EntryScreen_Components/LoginScreen";
 import PlayScreen from "./EntryScreen_Components/PlayScreen";
 import RegisterScreen from "./EntryScreen_Components/RegisterScreen";
 import MainMenu from "./MainMenu_Components/MainMenu";
+import LeaderBoardScreen from "./LeaderBoard/LeaderBoardScreen";
 
 function App() {
   console.log("Firebase: ", db);
@@ -18,6 +19,7 @@ function App() {
         <Route path="/LoginScreen" element={<LoginScreen />} />
         <Route path="/RegisterScreen" element={<RegisterScreen />} />
         <Route path="/MainMenu" element={<MainMenu />} />
+        <Route path="/LeaderBoard" element={<LeaderBoardScreen />} />
       </Routes>
     </BrowserRouter>
   );
