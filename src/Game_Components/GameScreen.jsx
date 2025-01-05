@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { db } from '../firebase.js';
-import { collection, getDocs, doc, getDoc, updateDoc, setDoc, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, updateDoc, setDoc, Timestamp, set } from 'firebase/firestore';
 import './GameScreen.css';
 
 const GameScreen = () => {
@@ -75,15 +75,15 @@ const GameScreen = () => {
           console.log('Pontuação registrada com sucesso!');
         }
 
-        // Salva o histórico de decisões no Firestore
-        const historyRef = doc(collection(db, 'decisionHistory')); // Aqui não passamos o ID para ser gerado automaticamente
+        // Armazenar o histórico de decisões no Firebase
+        const historyRef = doc(db, 'gameHistory', userId);
         await setDoc(historyRef, {
-          userId: userId,
           history: decisionHistory,
           finalScore: finalScore,
           date: Timestamp.now()
         });
         console.log('Histórico de jogo armazenado com sucesso!');
+        
       } catch (error) {
         console.error('Erro ao registrar ou atualizar pontuação:', error);
       }
@@ -99,9 +99,8 @@ const GameScreen = () => {
       setCurrentQuestionIndex(location.state.currentQuestionIndex);
       setDecisionHistory(location.state.decisionHistory || []);
 
-      // Verifica se chegou ao final das perguntas
       if (location.state.currentQuestionIndex >= questions.length) {
-        handleGameEnd(location.state.score); // Salva o histórico ao final do jogo
+        handleGameEnd(location.state.score);
       }
     }
   }, [location.state, questions.length, handleGameEnd]);
@@ -130,49 +129,49 @@ const GameScreen = () => {
       setEconomicScore(newEconomicScore);
 
       // Adiciona a decisão ao histórico
-      const newHistory = [
-        ...decisionHistory,
-        {
-          question: currentQuestion.question,
-          answer: selectedAnswer.text,
-          score: selectedAnswer.score,
-          impact: selectedAnswer.impact,
-          totalScore: newScore,
-          socialScore: newSocialScore,
-          environmentalScore: newEnvironmentalScore,
-          economicScore: newEconomicScore
-        }
-      ];
-      setDecisionHistory(newHistory);
+        const newHistory = [
+          ...decisionHistory,
+          {
+            question: currentQuestion.question,
+            answer: selectedAnswer.text,
+            score: selectedAnswer.score,
+            impact: selectedAnswer.impact,
+            totalScore: newScore,
+            socialScore: newSocialScore,
+            environmentalScore: newEnvironmentalScore,
+            economicScore: newEconomicScore
+          }
+        ];
+        setDecisionHistory(newHistory);
 
-      if (currentQuestionIndex < questions.length - 1) {
-        navigate('/AnswerDetails', {
-          state: {
-            answer: selectedAnswer.text,
-            score: selectedAnswer.score,
-            newScore: newScore,
-            socialScore: newSocialScore,
-            environmentalScore: newEnvironmentalScore,
-            economicScore: newEconomicScore,
-            currentQuestionIndex: currentQuestionIndex + 1,
-            decisionHistory: newHistory
-          }
-        });
-      } else {
-        navigate('/AnswerDetails', {
-          state: {
-            answer: selectedAnswer.text,
-            score: selectedAnswer.score,
-            newScore: newScore,
-            socialScore: newSocialScore,
-            environmentalScore: newEnvironmentalScore,
-            economicScore: newEconomicScore,
-            currentQuestionIndex: currentQuestionIndex + 1,
-            isLastQuestion: true,
-            decisionHistory: newHistory
-          }
-        });
-      }
+        if (currentQuestionIndex < questions.length - 1) {
+          navigate('/AnswerDetails', {
+            state: {
+              answer: selectedAnswer.text,
+              score: selectedAnswer.score,
+              newScore: newScore,
+              socialScore: newSocialScore,
+              environmentalScore: newEnvironmentalScore,
+              economicScore: newEconomicScore,
+              currentQuestionIndex: currentQuestionIndex + 1,
+              decisionHistory: newHistory
+            }
+          });
+        } else {
+          navigate('/AnswerDetails', {
+            state: {
+              answer: selectedAnswer.text,
+              score: selectedAnswer.score,
+              newScore: newScore,
+              socialScore: newSocialScore,
+              environmentalScore: newEnvironmentalScore,
+              economicScore: newEconomicScore,
+              currentQuestionIndex: currentQuestionIndex + 1,
+              isLastQuestion: true,
+              decisionHistory: newHistory
+            }
+          });
+        }
     }
   };
 
