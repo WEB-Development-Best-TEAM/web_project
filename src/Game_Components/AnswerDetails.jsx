@@ -4,27 +4,34 @@ import { useLocation, useNavigate } from 'react-router-dom';
 const AnswerDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { resposta, pontuacao, score, currentQuestionIndex, isLastQuestion } = location.state;
+  const { answer, score, newScore, socialScore, environmentalScore, economicScore, currentQuestionIndex, isLastQuestion, decisionHistory } = location.state;
 
   const handleNextQuestion = () => {
     if (isLastQuestion) {
-      //alert(`Fim do jogo! Sua pontuação final é: ${score}`);
-      navigate('/MainMenu', { state: { score, currentQuestionIndex: currentQuestionIndex + 1 } });
+      alert(`Fim do jogo! Sua pontuação final é: ${newScore}`);
+      navigate('/MainMenu');
     } else {
-      navigate('/Game', { state: { score, currentQuestionIndex: currentQuestionIndex + 1 } });
+      navigate('/GameScreen', {
+        state: {
+          score: newScore,
+          socialScore: socialScore,
+          environmentalScore: environmentalScore,
+          economicScore: economicScore,
+          currentQuestionIndex: currentQuestionIndex,
+          decisionHistory: decisionHistory
+        }
+      });
     }
   };
 
   return (
     <div>
       <h1>Detalhes da Resposta</h1>
-      <p>Opção Selecionada: {resposta}</p>
-      <p>Pontos Ganhos: {pontuacao}</p>
-      {isLastQuestion ? (
-        <button onClick={handleNextQuestion}>Fim</button>
-      ) : (
-        <button onClick={handleNextQuestion}>Próxima Pergunta</button>
-      )}
+      <p>Opção Selecionada: {answer}</p>
+      <p>Pontos Ganhos: {score}</p>
+      <button onClick={handleNextQuestion}>
+        {isLastQuestion ? 'Fim do Jogo' : 'Próxima Pergunta'}
+      </button>
     </div>
   );
 };

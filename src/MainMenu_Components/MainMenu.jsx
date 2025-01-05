@@ -25,7 +25,7 @@ function MainMenu() {
       }, []);
 
     const handlePlay = () => {
-        navigate('/game');
+        navigate('/GameScreen');
     };
 
     const handleGlobalScore = () => {

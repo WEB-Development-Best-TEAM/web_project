@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { db } from '../firebase.js';  // Supondo que o Firestore está configurado no firebase.js
+import { db } from '../firebase.js';
 import { collection, getDocs, doc, getDoc, updateDoc, setDoc, Timestamp } from 'firebase/firestore';
 
 const Game = () => {
@@ -12,7 +12,6 @@ const Game = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Recupera o ID do usuário do localStorage
     const userIdFromStorage = localStorage.getItem('userId');
     if (userIdFromStorage) {
       setUserId(userIdFromStorage);
@@ -27,7 +26,6 @@ const Game = () => {
         id: doc.id
       }));
 
-      // Ordena as perguntas pela 'ordem'
       const sortedQuestions = loadedQuestions.sort((a, b) => a.ordem - b.ordem);
       setQuestions(sortedQuestions);
     };
@@ -40,15 +38,12 @@ const Game = () => {
       try {
         const scoresRef = doc(db, 'scores', userId);
 
-        // Verifica se já existe um documento para o usuário
         const userDoc = await getDoc(scoresRef);
 
         if (userDoc.exists()) {
-          // O jogador já tem uma pontuação registrada, vamos atualizar se a nova for maior
           const existingScore = userDoc.data().score;
 
           if (finalScore > existingScore) {
-            // Atualiza o score se o novo for maior
             await updateDoc(scoresRef, {
               score: finalScore,
               date: Timestamp.now()
@@ -58,7 +53,6 @@ const Game = () => {
             console.log('A pontuação atual não supera o recorde anterior.');
           }
         } else {
-          // O jogador ainda não tem uma pontuação registrada, cria um novo documento
           await setDoc(scoresRef, {
             score: finalScore,
             date: Timestamp.now()
@@ -91,36 +85,52 @@ const Game = () => {
     return array;
   };
 
-  const handleAnswer = (option) => {
+  const handleAnswer = (optionId) => {
     const currentQuestion = questions[currentQuestionIndex];
-    const selectedAnswer = currentQuestion.respostas.find(resposta => resposta.id === option);
-
+    const selectedAnswer = currentQuestion.answers.find(answer => answer.id === optionId);
+  
     if (selectedAnswer) {
-      const newScore = score + selectedAnswer.pontuacao;
+      const newScore = score + selectedAnswer.score; // Atualiza a pontuação
       setScore(newScore);
-
+  
       if (currentQuestionIndex < questions.length - 1) {
-        navigate('/AnswerDetails', { state: { resposta: selectedAnswer.texto, pontuacao: selectedAnswer.pontuacao, score: newScore, currentQuestionIndex } });
+        navigate('/AnswerDetails', {
+          state: {
+            resposta: selectedAnswer.text,
+            pontuacao: selectedAnswer.score,
+            score: newScore,
+            currentQuestionIndex: currentQuestionIndex + 1
+          }
+        });
       } else {
-        navigate('/AnswerDetails', { state: { resposta: selectedAnswer.texto, pontuacao: selectedAnswer.pontuacao, score: newScore, currentQuestionIndex: currentQuestionIndex + 1, isLastQuestion: true } });
+        navigate('/AnswerDetails', {
+          state: {
+            resposta: selectedAnswer.text,
+            pontuacao: selectedAnswer.score,
+            score: newScore,
+            currentQuestionIndex: currentQuestionIndex + 1,
+            isLastQuestion: true
+          }
+        });
       }
     }
   };
+  
 
   if (questions.length === 0) return <div>Carregando...</div>;
 
   const currentQuestion = questions[currentQuestionIndex];
-  const shuffledAnswers = shuffleArray([...currentQuestion.respostas]);
+  const shuffledAnswers = shuffleArray([...currentQuestion.answers]);
 
   return (
     <div>
       <h1>Jogo de Decisões</h1>
       <div>
-        <p>{currentQuestion.pergunta}</p>
+        <p>{currentQuestion.question}</p>
         <div>
-          {shuffledAnswers.map((resposta) => (
-            <button key={resposta.id} onClick={() => handleAnswer(resposta.id)}>
-              {resposta.texto}
+          {shuffledAnswers.map((answer) => (
+            <button key={answer.id} onClick={() => handleAnswer(answer.id)}>
+              {answer.text}
             </button>
           ))}
         </div>
