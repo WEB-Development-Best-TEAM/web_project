@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { db, auth } from './firebaseConfig';
@@ -11,6 +12,7 @@ function LoginScreen() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -49,6 +51,14 @@ function LoginScreen() {
             // Successful login
             setSuccess('Login realizado com sucesso!');
             setError('');
+
+            // Redirect to the game page
+            navigate('/MainMenu');
+
+            // Store the user ID in local storage
+            const userId = user.uid;
+            localStorage.setItem('userId', userId);
+
             } catch (error) {
                 setError('Erro ao fazer login: ' + error.message);
                 setSuccess('');
