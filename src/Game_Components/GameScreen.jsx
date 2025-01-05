@@ -175,7 +175,7 @@ const GameScreen = () => {
     }
   };
 
-  if (questions.length === 0) return <div>Carregando...</div>;
+  if (questions.length === 0) return <div>A carregando...</div>;
 
   const currentQuestion = questions[currentQuestionIndex];
   const shuffledAnswers = shuffleArray([...currentQuestion.answers]);

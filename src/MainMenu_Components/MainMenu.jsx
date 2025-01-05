@@ -10,19 +10,22 @@ function MainMenu() {
 
     useEffect(() => {
         const fetchPlayerName = async () => {
-          const userId = localStorage.getItem('userId');
-          if (userId) {
-            const userDocRef = doc(db, 'users', userId);
-            const userDoc = await getDoc(userDocRef);
-            if (userDoc.exists()) {
-              const userData = userDoc.data();
-              setPlayerName(userData.username);
+            const userId = localStorage.getItem('userId');
+            if (userId) {
+                const userDocRef = doc(db, 'users', userId);
+                const userDoc = await getDoc(userDocRef);
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    setPlayerName(userData.username);
+                    navigate('/MainMenu');
+                }
+            } else {
+                navigate('/LoginScreen');
             }
-          }
         };
-    
+
         fetchPlayerName();
-      }, []);
+    }, [navigate]);
 
     const handlePlay = () => {
         navigate('/GameScreen');
@@ -35,7 +38,8 @@ function MainMenu() {
         navigate('/DecisionTimeLine');
     };
     const handleExit = () => {
-        window.close();
+        localStorage.removeItem('userId');
+        navigate('/LoginScreen'); 
     };
 
     return (
