@@ -115,3 +115,15 @@ p a {
     filter: blur(5px);
     /* Adiciona um efeito de desfoque */
 }
+
+.playbutton {
+    margin-top: 1rem;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }

@@ -29,7 +29,7 @@ function MainMenu() {
     };
 
     const handleGlobalScore = () => {
-        navigate('/globalScore');
+        navigate('/Leaderboard');
     };
 
     const handleExit = () => {
