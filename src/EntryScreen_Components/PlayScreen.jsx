@@ -17,6 +17,9 @@ function PlayScreen() {
             <Link to ="/LeaderBoard">
                 <input type="button" value="LeaderBoard"/>
             </Link>
+            <Link to ="/GameScreen">
+                <input type="button" value="GameScreen"/>
+            </Link>
         </div>
     );
 }
