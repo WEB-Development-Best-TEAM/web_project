@@ -39,26 +39,34 @@ const LeaderBoardScreen = () => {
   }, []);
 
   return (
-    <div className="leaderboard-container">
-      <h1>Leaderboard</h1>
-      <table className="leaderboard-table">
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Player</th>
-            <th>Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          {players.map((player, index) => (
-            <tr key={player.id}>
-              <td>{index + 1}</td>
-              <td>{player.username}</td>
-              <td>{player.score}</td>
+    <div>
+      <div className="background-video">
+        <video autoPlay muted loop>
+          <source src="./backgroundClip.mp4" type="video/mp4" />
+        </video>
+      </div>
+
+      <div className="leaderboard-container">
+        <h1>Leaderboard</h1>
+        <table className="leaderboard-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Player</th>
+              <th>Score</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {players.map((player, index) => (
+              <tr key={player.id}>
+                <td>{index + 1}</td>
+                <td>{player.username}</td>
+                <td>{player.score}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
