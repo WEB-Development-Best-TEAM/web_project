@@ -4,6 +4,8 @@ body {
   font-family: Arial, sans-serif;
   height: 100vh;
   overflow: hidden;
+
+  z-index: -2;
 }
 
 .game-container {

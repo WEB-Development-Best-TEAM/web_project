@@ -5,6 +5,8 @@ body {
     height: 100vh;
     overflow: hidden;
     position: relative;
+    background-color: black;
+    z-index: -2;
 }
 
 .background-video {

@@ -3,36 +3,29 @@ import "./DecisionTimeLine.css"; // Para estilos personalizados
 
 const Decisions = () => {
   return (
-    <div className="game-container">
-      <div className="background">
-        <img
-          src="path-to-your-globe-image.jpg"
-          alt="Planeta Terra"
-          className="globe-image"
-        />
-        <div className="overlay">
-          <div className="problem">
-            <p>(Problema)</p>
-          </div>
-          <div className="decision">
-            <p>(Decisão tomada pelo Jogador)</p>
-          </div>
-          <div className="effects">
-            <div className="effect positive">
-              <span className="arrow">↑</span> +15 Social
+    <div>
+       <div className="background-video">
+                <video autoPlay muted loop>
+                    <source src="./backgroundClip.mp4" type="video/mp4" />
+                </video>
             </div>
-            <div className="effect negative">
-              <span className="arrow">↓</span> -10 Ecológico
-            </div>
-          </div>
-          <div className="navigation">
-            <button className="nav-button left">←</button>
-            <button className="nav-button right">→</button>
-          </div>
+    <div className="container">
+      <div className="problem-box">(Problema)</div>
+      <div className="decision-box">(Decisão tomada pelo Jogador)</div>
+      <div className="stats">
+        <div className="stat">
+          <span className="arrow up">↑</span> +15 Social
+        </div>
+        <div className="stat">
+          <span className="arrow down">↓</span> -10 Ecológico
         </div>
       </div>
+      <button className="nav-button left">←</button>
+      <button className="nav-button right">→</button>
+    </div>
     </div>
   );
-};
+}
 
 export default Decisions;
+

@@ -31,7 +31,9 @@ function MainMenu() {
     const handleGlobalScore = () => {
         navigate('/Leaderboard');
     };
-
+    const handleTimeLine = () => {
+        navigate('/DecisionTimeLine');
+    };
     const handleExit = () => {
         window.close();
     };
@@ -50,6 +52,7 @@ function MainMenu() {
                 <div className="button-container">
                     <button onClick={handlePlay}>Jogar</button>
                     <button onClick={handleGlobalScore}>Placar de Classificação</button>
+                    <button onClick={handleTimeLine}>TimeLine</button>
                     <button onClick={handleExit}>Sair</button>
                 </div>
             </div>

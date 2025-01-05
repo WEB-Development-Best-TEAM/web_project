@@ -20,7 +20,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes> 
-        <Route path="/" element={<PlayScreen />} />
+        <Route path="/" element={<MainMenu />} />
         <Route path="/LoginScreen" element={<LoginScreen />} />
         <Route path="/RegisterScreen" element={<RegisterScreen />} />
         <Route path="/MainMenu" element={<MainMenu />} />

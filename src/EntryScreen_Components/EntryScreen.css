@@ -13,6 +13,8 @@ html {
     align-items: center;
     /*background-color: #f0f4f8;*/
     font-family: Arial, sans-serif;
+    background-color: #000000;
+    z-index: -2;
 }
 
 form {
