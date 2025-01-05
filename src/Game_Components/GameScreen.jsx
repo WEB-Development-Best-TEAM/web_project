@@ -182,6 +182,12 @@ const GameScreen = () => {
   const shuffledAnswers = shuffleArray([...currentQuestion.answers]);
 
   return (
+    <div>
+      <div className="background-video">
+                <video autoPlay muted loop>
+                    <source src="./backgroundClip.mp4" type="video/mp4" />
+                </video>
+            </div>
     <div className="game-container">
       <div className="main-content">
         <div className="question-container">
@@ -216,6 +222,7 @@ const GameScreen = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

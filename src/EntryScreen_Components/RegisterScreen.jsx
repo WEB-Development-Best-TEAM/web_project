@@ -2,9 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { collection, query, where, getDocs, setDoc, doc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
-import { db, auth } from './firebaseConfig';
-import userIcon from './assets/user_icon.png';
-import passwordIcon from './assets/passWord_icon.png';
+import { db, auth } from '../firebase';
 
 function RegisterScreen() {
     const [username, setUsername] = useState('');
@@ -44,7 +42,7 @@ function RegisterScreen() {
             await setDoc(doc(db, "users", user.uid), {
                 uid: user.uid,
                 username,
-                email,             
+                email,
                 registrationDate: new Date().toISOString(),
             });
 
@@ -58,7 +56,11 @@ function RegisterScreen() {
 
     return (
         <form onSubmit={handleRegister}>
-            <div className="background-blur"></div>
+            <div className="background-video">
+                <video autoPlay muted loop>
+                    <source src="./backgroundClip.mp4" type="video/mp4" />
+                </video>
+            </div>
             <h1>Registrar</h1>
 
             <div className="inputBox">
@@ -69,7 +71,7 @@ function RegisterScreen() {
                     onChange={(e) => setUsername(e.target.value)}
                     required
                 />
-                <img className="icon" src={userIcon} alt="User Icon" />
+                <img className="icon" src={"/user_icon.png"} alt="User Icon" />
             </div>
 
             <div className="inputBox">
@@ -80,7 +82,7 @@ function RegisterScreen() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                 />
-                <img className="icon" src={userIcon} alt="Email Icon" />
+                <img className="icon" src={"/user_icon.png"} alt="Email Icon" />
             </div>
 
             <div className="inputBox">
@@ -91,7 +93,7 @@ function RegisterScreen() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                <img className="icon" src={passwordIcon} alt="Password Icon" />
+                <img className="icon" src={"/password_icon.png"} alt="Password Icon" />
             </div>
 
             <div className="inputBox">
@@ -102,7 +104,7 @@ function RegisterScreen() {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                 />
-                <img className="icon" src={passwordIcon} alt="Password Icon" />
+                <img className="icon" src={"/password_icon.png"} alt="Password Icon" />
             </div>
 
             {error && <p>{error}</p>}

@@ -12,7 +12,6 @@ body {
   justify-content: space-between;
   height: 100vh;
   width: 100vw;
-  background: url("assets/earth.png") no-repeat center center;
   background-size: cover;
   color: white;
 }
@@ -100,4 +99,21 @@ body {
   padding: 10px;
   background-color: #333;
   border-radius: 5px;
+}
+
+.background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.background-video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(5px);
 }

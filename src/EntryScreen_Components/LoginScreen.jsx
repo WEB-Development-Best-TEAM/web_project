@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { db, auth } from './firebaseConfig';
-import userIcon from './assets/user_icon.png';
-import passwordIcon from './assets/passWord_icon.png';
+import { db, auth } from '../firebase';
 
 function LoginScreen() {
     const [username, setUsername] = useState('');
@@ -27,16 +25,16 @@ function LoginScreen() {
                 setSuccess('');
                 return;
             }
-            
+
             // Retrieve the user's email from Firestore
             const userDoc = querySnapshot.docs[0];
             const userData = userDoc.data();
             const email = userData.email;
-            
+
             // Authenticate using Firebase Auth
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            
+
             // Check if the user has verified their email            
             if (!user.emailVerified) {
                 console.log('User Information:', userData);
@@ -44,10 +42,10 @@ function LoginScreen() {
                 setSuccess('');
                 return;
             }
-            
+
             // Log user information
             console.log('User Information:', userData);
-            
+
             // Successful login
             setSuccess('Login realizado com sucesso!');
             setError('');
@@ -59,15 +57,19 @@ function LoginScreen() {
             const userId = user.uid;
             localStorage.setItem('userId', userId);
 
-            } catch (error) {
-                setError('Erro ao fazer login: ' + error.message);
-                setSuccess('');
-            }
-        };
+        } catch (error) {
+            setError('Erro ao fazer login: ' + error.message);
+            setSuccess('');
+        }
+    };
 
     return (
         <form onSubmit={handleLogin}>
-            <div className="background-blur"></div>
+            <div className="background-video">
+                <video autoPlay muted loop>
+                    <source src="./backgroundClip.mp4" type="video/mp4" />
+                </video>
+            </div>
             <h1>Entrar</h1>
 
             <div className="inputBox">
@@ -78,7 +80,7 @@ function LoginScreen() {
                     onChange={(e) => setUsername(e.target.value)}
                     required
                 />
-                <img className="icon" src={userIcon} alt="User Icon" />
+                <img className="icon" src={"/user_icon.png"} alt="User Icon" />
             </div>
 
             <div className="inputBox">
@@ -89,7 +91,7 @@ function LoginScreen() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                <img className="icon" src={passwordIcon} alt="Password Icon" />
+                <img className="icon" src={"/password_icon.png"} alt="Password Icon" />
             </div>
 
             {error && <p>{error}</p>}
