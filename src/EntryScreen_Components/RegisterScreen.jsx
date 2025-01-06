@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { collection, query, where, getDocs, setDoc, doc } from 'firebase/firestore';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { db, auth } from '../firebase';
 import './EntryScreen.css';
 
 const RegisterScreen = () => {
@@ -9,27 +10,50 @@ const RegisterScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
     if (password !== confirmPassword) {
-      setError('As senhas não coincidem');
-      return;
+        setError('As palavras-passe não coincidem');
+        setSuccess('');
+        return;
     }
+
     try {
-      await addDoc(collection(db, 'users'), {
-        username,
-        email,
-        password,
-        registrationDate: new Date().toISOString(),
-      });
-      navigate('/LoginScreen'); // Redirecionar para a tela de login
+        // Check if the username already exists
+        const usernameQuery = query(collection(db, "users"), where("username", "==", username));
+        const usernameSnapshot = await getDocs(usernameQuery);
+        if (!usernameSnapshot.empty) {
+            setError('Nome de utilizador já existe');
+            setSuccess('');
+            return;
+        }
+
+        // Register user with Firebase Auth
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Send verification email
+        await sendEmailVerification(user);
+
+        // Save additional user details in Firestore
+        await setDoc(doc(db, "users", user.uid), {
+            uid: user.uid,
+            username,
+            email,             
+            registrationDate: new Date().toISOString(),
+        });
+
+        setSuccess('Registo bem-sucedido! Por favor, verifique o seu email.');
+        setError('');
     } catch (error) {
-      setError('Erro ao registrar usuário');
+        setError('Erro ao registar utilizador: ' + error.message);
+        setSuccess('');
     }
-  };
+};
 
   return (
     <form onSubmit={handleRegister}>
