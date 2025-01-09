@@ -57,16 +57,16 @@ const Decisions = () => {
         {currentDecision ? (
           <>
             <div className="problem-box">{currentDecision.question}</div>
-            <div className="decision-box">{currentDecision.answer}</div>
+            <div className="decision-box">{currentDecision.selectedAnswer}</div>
             <div className="stats">
               <div className="stat">
-                <span className="arrow up">↑</span> {currentDecision.impact.economic} Económico
+                <span className="arrow up">↑</span> {currentDecision.economicImpact} Económico
               </div>
               <div className="stat">
-                <span className="arrow down">↓</span> {currentDecision.impact.social} Social
+                <span className="arrow down">↓</span> {currentDecision.socialImpact} Social
               </div>
               <div className="stat">
-                <span className="arrow environment">⬆</span> {currentDecision.impact.environmental} Ambiental
+                <span className="arrow environment">⬆</span> {currentDecision.environmentalImpact} Ambiental
               </div>
             </div>
           </>

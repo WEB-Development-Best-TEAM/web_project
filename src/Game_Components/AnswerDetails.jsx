@@ -17,10 +17,20 @@ const AnswerDetails = () => {
     decisionHistory,
   } = location.state;
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     if (isLastQuestion) {
       alert(`Fim do jogo! Sua pontuação final é: ${newScore}`);
-      navigate('/MainMenu');
+      navigate('/MainMenu', { 
+        state: { 
+          score: newScore,
+          socialScore,
+          environmentalScore,
+          economicScore,
+          currentQuestionIndex: currentQuestionIndex + 1, 
+          decisionHistory, 
+          isLastQuestion,  
+        } 
+      });
     } else {
       navigate('/GameScreen', {
         state: {
@@ -28,9 +38,9 @@ const AnswerDetails = () => {
           socialScore,
           environmentalScore,
           economicScore,
-          currentQuestionIndex,
+          currentQuestionIndex: currentQuestionIndex + 1,
           decisionHistory, 
-          isLastQuestion,   
+          isLastQuestion: false,   
         },
       });
     }
@@ -56,5 +66,6 @@ const AnswerDetails = () => {
     </div>
   );
 };
+
 
 export default AnswerDetails;

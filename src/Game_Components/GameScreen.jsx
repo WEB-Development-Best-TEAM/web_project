@@ -14,6 +14,7 @@ const GameScreen = () => {
   const [userId, setUserId] = useState(null);
   const [playerName, setPlayerName] = useState('');
   const [decisionHistory, setDecisionHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -44,6 +45,7 @@ const GameScreen = () => {
 
       const sortedQuestions = loadedQuestions.sort((a, b) => a.ordem - b.ordem);
       setQuestions(sortedQuestions);
+      setLoading(false);
     };
 
     fetchQuestions();
@@ -53,11 +55,14 @@ const GameScreen = () => {
     if (userId) {
       try {
         const scoresRef = doc(db, 'scores', userId);
-        const userDoc = await getDoc(scoresRef);
+        const scoreDoc = await getDoc(scoresRef);
+
+        const historyRef = doc(db, 'gameHistory', userId);
+        const histDoc = await getDoc(historyRef);
 
         // Atualiza ou cria o score na coleção "scores"
-        if (userDoc.exists()) {
-          const existingScore = userDoc.data().score;
+        if (scoreDoc.exists()) {
+          const existingScore = scoreDoc.data().score;
 
           if (score > existingScore) {
             await updateDoc(scoresRef, {
@@ -68,6 +73,16 @@ const GameScreen = () => {
               date: Timestamp.now(),
             });
             console.log('Recorde atualizado com sucesso!');
+
+            await updateDoc(historyRef, {
+              history: decisionHistory,
+              finalScore: score,
+              socialScore,
+              environmentalScore,
+              economicScore,
+              date: Timestamp.now(),
+            });
+            console.log('Histórico de jogo armazenado com sucesso!');
           } else {
             console.log('A pontuação atual não supera o recorde anterior.');
           }
@@ -80,43 +95,43 @@ const GameScreen = () => {
             date: Timestamp.now(),
           });
           console.log('Pontuação registrada com sucesso!');
-        }
 
-        // Armazenar o histórico de decisões na coleção "gameHistory"
-        const historyRef = doc(db, 'gameHistory', userId);
-        await setDoc(historyRef, {
-          history: decisionHistory,
-          finalScore: score,
-          socialScore,
-          environmentalScore,
-          economicScore,
-          date: Timestamp.now(),
-        });
-        console.log('Histórico de jogo armazenado com sucesso!');
+          // Armazenar o histórico de decisões na coleção "gameHistory"
+          await setDoc(historyRef, {
+            history: decisionHistory,
+            finalScore: score,
+            socialScore,
+            environmentalScore,
+            economicScore,
+            date: Timestamp.now(),
+          });
+          console.log('Histórico de jogo armazenado com sucesso!');
+        }
       } catch (error) {
-        console.error('Erro ao registrar ou atualizar pontuação:', error);
+        console.error('Erro ao registrar ou atualizar:', error);
       }
     }
   }, [userId, score, socialScore, environmentalScore, economicScore, decisionHistory]);
 
   useEffect(() => {
-    if (location.state) {
+    if (!loading && location.state) {
       setScore(location.state.score || 0);
       setSocialScore(location.state.socialScore || 0);
       setEnvironmentalScore(location.state.environmentalScore || 0);
       setEconomicScore(location.state.economicScore || 0);
-      setCurrentQuestionIndex(location.state.currentQuestionIndex || 0);
+      setCurrentQuestionIndex(location.state.currentQuestionIndex);
       setDecisionHistory(location.state.decisionHistory || []);
+  
+      console.log('Questions Lenght:', questions.length);
+      console.log('Current Question Index:', location.state.currentQuestionIndex);
+      console.log('Verify: ', location.state.currentQuestionIndex >= questions.length);
 
-      console.log('isLastQuestion:', location.state.isLastQuestion);
-
-      // Chama `handleGameEnd` se for a última pergunta
-      if (location.state.isLastQuestion) {
+      if (location.state.currentQuestionIndex >= questions.length) {
         console.log('handleGameEnd');
         handleGameEnd();
       }
     }
-  }, [location.state, handleGameEnd]);
+  }, [location.state, questions.length, loading, handleGameEnd]);
 
   const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -127,74 +142,84 @@ const GameScreen = () => {
   };
 
   const handleAnswer = (optionId) => {
-    const currentQuestion = questions[currentQuestionIndex];
-    const selectedAnswer = currentQuestion.answers.find((answer) => answer.id === optionId);
-  
-    if (selectedAnswer) {
-      const newScore = score + selectedAnswer.score;
-      const newSocialScore = socialScore + selectedAnswer.impact.social;
-      const newEnvironmentalScore = environmentalScore + selectedAnswer.impact.environmental;
-      const newEconomicScore = economicScore + selectedAnswer.impact.economic;
-  
-      setScore(newScore);
-      setSocialScore(newSocialScore);
-      setEnvironmentalScore(newEnvironmentalScore);
-      setEconomicScore(newEconomicScore);
-  
-      const newHistory = [
-        ...decisionHistory,
-        {
-          question: currentQuestion.question,
-          answer: selectedAnswer.text,
-          score: selectedAnswer.score,
-          impact: selectedAnswer.impact,
-          totalScore: newScore,
-          socialScore: newSocialScore,
-          environmentalScore: newEnvironmentalScore,
-          economicScore: newEconomicScore,
-        },
-      ];
-      setDecisionHistory(newHistory);
-  
-      const isLastQuestion = currentQuestionIndex === questions.length - 1;
-      console.log('isLastQuestion:', isLastQuestion);
-  
-      if (isLastQuestion) {
-        navigate('/AnswerDetails', {
-          state: {
+      const currentQuestion = questions[currentQuestionIndex];
+      const selectedAnswer = currentQuestion.answers.find((answer) => answer.id === optionId);
+    
+      if (selectedAnswer) {
+        const newScore = score + selectedAnswer.score;
+        const newSocialScore = socialScore + selectedAnswer.impact.social;
+        const newEnvironmentalScore = environmentalScore + selectedAnswer.impact.environmental;
+        const newEconomicScore = economicScore + selectedAnswer.impact.economic;
+    
+        setScore(newScore);
+        setSocialScore(newSocialScore);
+        setEnvironmentalScore(newEnvironmentalScore);
+        setEconomicScore(newEconomicScore);
+    
+        const newHistory = [
+          ...decisionHistory,
+          {
+            question: currentQuestion.question,
             answer: selectedAnswer.text,
             score: selectedAnswer.score,
-            newScore,
+            impact: selectedAnswer.impact,
+            totalScore: newScore,
             socialScore: newSocialScore,
             environmentalScore: newEnvironmentalScore,
             economicScore: newEconomicScore,
-            currentQuestionIndex: currentQuestionIndex + 1,
-            decisionHistory: newHistory,
-            isLastQuestion: true,  // Passando true para a última pergunta
           },
-        });
-      } else {
-        navigate('/AnswerDetails', {
-          state: {
-            answer: selectedAnswer.text,
-            score: selectedAnswer.score,
-            newScore,
-            socialScore: newSocialScore,
-            environmentalScore: newEnvironmentalScore,
-            economicScore: newEconomicScore,
-            currentQuestionIndex: currentQuestionIndex + 1,
-            decisionHistory: newHistory,
-            isLastQuestion: false,  // Passando false para perguntas intermediárias
-          },
-        });
+        ];
+        setDecisionHistory(newHistory);
+    
+        const isLastQuestion = currentQuestionIndex === questions.length - 1;
+    
+        if (currentQuestionIndex < questions.length) {
+          navigate('/AnswerDetails', {
+            state: {
+              answer: selectedAnswer.text,
+              score: selectedAnswer.score,
+              newScore,
+              socialScore: newSocialScore,
+              environmentalScore: newEnvironmentalScore,
+              economicScore: newEconomicScore,
+              currentQuestionIndex: currentQuestionIndex,
+              decisionHistory: newHistory,
+              isLastQuestion: false,
+            },
+          });
+        } else {
+          navigate('/AnswerDetails', {
+            state: {
+              answer: selectedAnswer.text,
+              score: selectedAnswer.score,
+              newScore,
+              socialScore: newSocialScore,
+              environmentalScore: newEnvironmentalScore,
+              economicScore: newEconomicScore,
+              currentQuestionIndex: currentQuestionIndex,
+              decisionHistory: newHistory,
+              isLastQuestion: true,
+            },
+          });
+        }
+        
       }
-    }
   };
 
-  if (questions.length === 0) return <div>Carregando...</div>;
+  if (loading) return <div>A Carregar...</div>;
 
   const currentQuestion = questions[currentQuestionIndex];
-  const shuffledAnswers = shuffleArray([...currentQuestion.answers]);
+
+  if (!currentQuestion) {
+    return (
+      <div>
+        <h2>Fim do jogo!</h2>
+        <p>Sua pontuação final é: {score}</p>
+      </div>
+    );
+  }
+
+const shuffledAnswers = shuffleArray([...currentQuestion.answers]);
 
   return (
     <div>
