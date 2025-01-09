@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import "./DecisionTimeLine.css";
+import {  useNavigate } from 'react-router-dom';
 
 const Decisions = () => {
   const [data, setData] = useState([]);
   const [currentDocIndex, setCurrentDocIndex] = useState(0);
   const [currentHistoryIndex, setCurrentHistoryIndex] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,6 +82,7 @@ const Decisions = () => {
           →
         </button>
       </div>
+      <button className = "backButton" onClick={() => navigate("/MainMenu")}>Voltar ao Menu</button>
     </div>
   );
 };

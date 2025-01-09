@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import './LeaderBoardScreen.css';
+import {  useNavigate } from 'react-router-dom';
 
 const LeaderBoardScreen = () => {
   const [players, setPlayers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -38,6 +40,7 @@ const LeaderBoardScreen = () => {
     fetchPlayers();
   }, []);
 
+
   return (
     <div>
       <div className="background-video">
@@ -67,6 +70,7 @@ const LeaderBoardScreen = () => {
           </tbody>
         </table>
       </div>
+      <button className = "backButton" onClick={() => navigate("/MainMenu")}>Voltar ao Menu</button>
     </div>
   );
 };
