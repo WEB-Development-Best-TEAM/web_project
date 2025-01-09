@@ -4,7 +4,6 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LoginScreen from "./EntryScreen_Components/LoginScreen";
-import PlayScreen from "./EntryScreen_Components/PlayScreen";
 import RegisterScreen from "./EntryScreen_Components/RegisterScreen";
 import MainMenu from "./MainMenu_Components/MainMenu";
 import Game from "./Game_Components/Game";

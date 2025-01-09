@@ -12,9 +12,9 @@ body {
   position: relative;
   width: 500px;
   height: 500px;
-  background-color: rgba(51, 51, 51, 0.8); /* Fundo cinza meio transparente */
-  border: none; /* Remove a borda */
-  border-radius: 15px; /* Cantos arredondados (opcional) */
+  background-color: rgba(51, 51, 51, 0.8);
+  border: none;
+  border-radius: 15px;
 }
 
 .problem-box, .decision-box {
@@ -59,7 +59,7 @@ body {
 }
 
 .environment {
-  color: blue; /* Cor para o tópico "Ambiental" */
+  color: blue;
 }
 
 .nav-button {

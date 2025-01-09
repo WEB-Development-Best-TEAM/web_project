@@ -70,6 +70,7 @@ function LoginScreen() {
                     <source src="./backgroundClip.mp4" type="video/mp4" />
                 </video>
             </div>
+            
             <h1>Entrar</h1>
 
             <div className="inputBox">

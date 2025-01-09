@@ -106,16 +106,13 @@ p a {
     height: 100%;
     overflow: hidden;
     z-index: -1;
-    /* Para o vídeo ficar atrás do conteúdo */
 }
 
 .background-video video {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Garante que o vídeo cobre toda a tela sem distorções */
     filter: blur(5px);
-    /* Adiciona um efeito de desfoque */
 }
 
 .playbutton {

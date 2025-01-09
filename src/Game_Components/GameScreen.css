@@ -1,10 +1,8 @@
-/* Estilos gerais */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   height: 100vh;
   overflow: hidden;
-
   z-index: -2;
 }
 
@@ -18,7 +16,6 @@ body {
   color: white;
 }
 
-/* Zona principal com pergunta e respostas */
 .main-content {
   flex: 3;
   display: flex;
@@ -27,7 +24,6 @@ body {
   margin: 20px;
 }
 
-/* Container para a pergunta */
 .question-container {
   flex: 1;
   padding: 20px;
@@ -50,7 +46,6 @@ body {
   font-size: 20px; 
 }
 
-/* Container das respostas */
 .answers-container {
   display: flex;
   flex-direction: column;
@@ -74,7 +69,6 @@ body {
   background-color: green;
 }
 
-/* Sidebar */
 .sidebar {
   flex: 1;
   margin: 20px;
