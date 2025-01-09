@@ -25,33 +25,34 @@ const AnswerDetails = () => {
       navigate('/GameScreen', {
         state: {
           score: newScore,
-          socialScore: socialScore,
-          environmentalScore: environmentalScore,
-          economicScore: economicScore,
-          currentQuestionIndex: currentQuestionIndex,
-          decisionHistory: decisionHistory,
+          socialScore,
+          environmentalScore,
+          economicScore,
+          currentQuestionIndex,
+          decisionHistory, 
+          isLastQuestion,   
         },
       });
     }
   };
 
   return (
-    <div> 
+    <div>
       <div className="background-video">
         <video autoPlay muted loop>
           <source src="./backgroundClip.mp4" type="video/mp4" />
         </video>
       </div>
-    <div className="container">
-      <div className="content">
-        <h1>Detalhes da Resposta</h1>
-        <p>Opção Selecionada: {answer}</p>
-        <p>Pontos Ganhos: {score}</p>
-        <button onClick={handleNextQuestion}>
-          {isLastQuestion ? 'Fim do Jogo' : 'Próxima Pergunta'}
-        </button>
+      <div className="container">
+        <div className="content">
+          <h1>Detalhes da Resposta</h1>
+          <p>Opção Selecionada: {answer}</p>
+          <p>Pontos Ganhos: {score}</p>
+          <button onClick={handleNextQuestion}>
+            {isLastQuestion ? 'Fim do Jogo' : 'Próxima Pergunta'}
+          </button>
+        </div>
       </div>
-    </div>
     </div>
   );
 };
