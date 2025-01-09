@@ -58,7 +58,7 @@ const GameScreen = () => {
         const scoreDoc = await getDoc(scoresRef);
 
         const historyRef = doc(db, 'gameHistory', userId);
-        const histDoc = await getDoc(historyRef);
+        // const histDoc = await getDoc(historyRef);
 
         // Atualiza ou cria o score na coleção "scores"
         if (scoreDoc.exists()) {
@@ -171,7 +171,7 @@ const GameScreen = () => {
         ];
         setDecisionHistory(newHistory);
     
-        const isLastQuestion = currentQuestionIndex === questions.length - 1;
+        // const isLastQuestion = currentQuestionIndex === questions.length - 1;
     
         if (currentQuestionIndex < questions.length) {
           navigate('/AnswerDetails', {
@@ -222,7 +222,7 @@ const GameScreen = () => {
 const shuffledAnswers = shuffleArray([...currentQuestion.answers]);
 
   return (
-    <div>
+    <div> 
       <div className="background-video">
         <video autoPlay muted loop>
           <source src="./backgroundClip.mp4" type="video/mp4" />
